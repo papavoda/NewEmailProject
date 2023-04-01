@@ -21,7 +21,7 @@ def send_email(request):
             EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
 
         messageSent = True
-    return render(request, 'mail.home.html', {
+    return render(request, 'mail/home.html', {
         'recipient': recipient_list,
         'messageSent': messageSent,
     })
