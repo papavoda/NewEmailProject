@@ -16,8 +16,11 @@
         {% else %}
              <h1>Send email with <code>{{ send_method }}</code></h1>
         <div class="container">
+
+
+
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                <form method="post" action="{% url 'email_send' %}">
+               <form method="post" action="{% url 'email_send' %}">
                 {% csrf_token %}
                     <div class="cals g-3">
                         <label for="exampleFormControlName" class="form-label"></label>

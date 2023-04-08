@@ -1,6 +1,11 @@
 from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+# em = EmailMessage(subject='test20', body='Test', to=['remont199@gmail.com'])
+# em.send()
+from django.views.generic import TemplateView, CreateView
+from .forms import MailForm
 
 
 def send_email(request):
@@ -14,14 +19,39 @@ def send_email(request):
                 password=settings.EMAIL_HOST_PASSWORD,
                 use_tls=settings.EMAIL_USE_TLS
         ) as connection:
+            name = request.POST.get("name")
+            phone = request.POST.get("phone")
             subject = request.POST.get("subject")
             email_from = settings.EMAIL_HOST_USER
-            recipient_list = [request.POST.get("email"), ]
+            recipient_list = [settings.EMAIL_TO, ]
             message = request.POST.get("message")
-            EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+            feedback = f'{name} - {phone} - {subject}'
+            EmailMessage(feedback, message, email_from, recipient_list, connection=connection).send()
 
         messageSent = True
     return render(request, 'mail/home.html', {
         'recipient': recipient_list,
         'messageSent': messageSent,
+        'send_method': 'def send_email(request):',
     })
+
+
+class HomeView(TemplateView):
+    # template_name = 'mail/class_email.html'
+    template_name = 'mail/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mail_form'] = MailForm
+        context['send_method'] = 'class HomeView(TemplateView):'
+        return context
+
+
+class EmailSend(CreateView):
+    form_class = MailForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return send_email(request)
+
