@@ -4,8 +4,12 @@ from django.shortcuts import render, redirect
 
 # em = EmailMessage(subject='test20', body='Test', to=['remont199@gmail.com'])
 # em.send()
+from django.urls import reverse
+
+from .models import CustomerRequest
+
 from django.views.generic import TemplateView, CreateView
-from .forms import MailForm
+from .forms import MailForm, CustomerRequestForm
 
 
 def send_email(request):
@@ -47,6 +51,18 @@ class HomeView(TemplateView):
         return context
 
 
+class CustomerRequestView(TemplateView):
+    template_name = 'mail/class_email.html'
+
+    # template_name = 'mail/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CustomerRequestForm
+        context['send_method'] = 'class CustomerRequestView(TemplateView):'
+        return context
+
+
 class EmailSend(CreateView):
     form_class = MailForm
 
@@ -55,3 +71,16 @@ class EmailSend(CreateView):
         if form.is_valid():
             return send_email(request)
 
+
+class CustomerRequestSend(CreateView):
+    form_class = CustomerRequestForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            self.object = form.save()
+            return send_email(request)
+        else:
+            context = {'form': form}
+            # return redirect(reverse('cust_req'))
+            return render(request, 'mail/class_email.html', context)

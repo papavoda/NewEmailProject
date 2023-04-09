@@ -7,6 +7,15 @@
         <title>Send email</title>
     </head>
     <body>
+    <div>
+        <nav>
+            <ul>
+                <li class="nav-item "><a href="{% url 'send_email' %}" class="link">Send email with function</a></li>
+                <li class="nav-item "><a href="{% url 'home' %}" class="link">Send email with class</a></li>
+                <li class="nav-item "><a href="{% url 'cust_req' %}" class="link">Send email with class and save in db</a></li>
+            </ul>
+        </nav>
+    </div>
          {% if messageSent %}
             <div class="container">
               <h3><strong>Email successfully sent</strong></h3>

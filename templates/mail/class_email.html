@@ -20,26 +20,13 @@
 
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-               <form method="post" action="{% url 'email_send' %}">
-                {% csrf_token %}
-                    <div class="cals g-3">
-                        <label for="exampleFormControlName" class="form-label"></label>
-                        <input type="text" class="form-control" name="name" id="exampleFormControlName" placeholder="Name">
-                    </div>
-                   <div class="cals g-3">
-                     <label for="exampleInputPhone" class="form-label"></label>
-                     <input type="text" class="form-control" name="phone" id="exampleInputPhone" placeholder="Phone">
-                   </div>
-                    <div class="cals g-3">
-                     <label for="exampleInputSubject" class="form-label"></label>
-                     <input type="text" class="form-control" name="subject" id="exampleInputSubject" placeholder="Subject">
-                   </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label"></label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" name="message" rows="3" placeholder="Message"></textarea>
-           </div>
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </form>
+                <form action="{% url 'send' %}" method="post" class="p-5 bg-light">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="input-list">
+                                <input type="submit" value="Отправить" class="btn py-3 px-4 btn-primary">
+                            </div>
+                        </form>
             </div>
         </div>
         {% endif %}
